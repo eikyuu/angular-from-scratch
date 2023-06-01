@@ -1,20 +1,23 @@
+import { Formatter } from '../services/formatter';
+
 export class PhoneNumberDirective {
-    constructor(public element: HTMLElement) {}
+
+    constructor(public element: HTMLElement, private formatter: Formatter) {
+        console.log('PhoneNumberDirective constructor', Math.random());
+    }
 
     static selector = '[phone-number]';
 
     willHavesSpaces = true;
 
     private formatNumber(element: HTMLInputElement) {
-        const value = element.value.replace(/[^\d]/g, '').substring(0, 10);
 
-        const groups: string[] = [];
-
-        for (let i = 0; i < value.length; i += 2) {
-            groups.push(value.substring(i, i + 2));
-        }
-
-        element.value = groups.join(this.willHavesSpaces ? ' ' : '');
+        element.value = this.formatter.formatNumber(
+            element.value,
+            this.willHavesSpaces,
+            10,
+            2
+        );
     }
 
    public init() {

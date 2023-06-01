@@ -1,18 +1,19 @@
-export class CreditCardDirective {
-    constructor(public element: HTMLElement) {}
+import { Formatter } from '../services/formatter';
 
-    static selector = '[card-number]';
+export class CreditCardDirective {
+
+    constructor(public element: HTMLElement, private formatter: Formatter) {
+        console.log('CreditCardDirective constructor', Math.random());
+    }
+    static selector = '[card-number]';    
 
     private formatCreditCard(element: HTMLInputElement) {
-        const value = element.value.replace(/[^\d]/g, '').substring(0, 16);
-
-        const groups: string[] = [];
-
-        for (let i = 0; i < value.length; i += 4) {
-            groups.push(value.substring(i, i + 4));
-        }
-
-        element.value = groups.join(' ');
+        element.value = this.formatter.formatNumber(
+            element.value,
+            true,
+            16,
+            4
+        );
     }
 
    public init() {
